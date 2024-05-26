@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <link rel="stylesheet" href="{% static 'css/search.css' %}">
+<script src="https://kit.fontawesome.com/e95727a65e.js" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wyszukiwarka lokalizacji</title>
+
+</head>
+<body>
+<div class="navbar">
+  <a href="#user"><i class="fa-solid fa-user fa-xl"></i></a><span class="user">Muholot #25432</span>
+  <a href="#home">Strona Główna</a>
+  <a href="#achivments">Osiągnięcia</a>
+  <a href="#contact">Ranking</a>
+  <a href="#search" style="background-color: #ddd; color: black; ">Wyszukaj</a>
+  <a href="#news">Nowości</a>
+  <button class="logout">Wyloguj</button>
+</div>
+
+<div class="search-container">
+  <form action="/action_page.php">
+    <input type="text" placeholder="Szukaj restauracji..." name="search">
+    <button type="submit">Szukaj</button>
+  </form>
+</div>
+
+<div class="container">
+  <div class="search-result">
+    <div>
+      <h1>Bar u Grochowej</h1>
+      <p class="rating">★★★☆☆</p>
+      <p class="address">Poznań, ul. Piątkowska 65A</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

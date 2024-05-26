@@ -1,0 +1,43 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login page</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="login-container">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <h2>Zaloguj się do gry Ksiazulo</h2>
+            <div>
+                <style>
+                    h5{
+                        color: red;
+                    }
+                </style>
+                {% for message in messages %}
+                <h5>{{ message }}</h5>
+                {% endfor %}
+            </div>
+        
+            <div class="input-group">
+                <label for="username">Nazwa użytkownika:</label>
+                <input type="username" id="username" name="username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Hasło:</label>
+                <input type="password" id="password" name="password" required>
+                <a href="forgot-password.html" class="forgot-password">Nie pamiętasz hasła?</a>
+            </div>
+            <div class="actions">
+                <button type="submit" class="login-btn">Zaloguj się</button>
+            </div>
+            <button type="button" class="register-btn" onclick="location.href='/register'">Rejestracja</button>
+        </form>
+    </div>
+</body>
+</html>

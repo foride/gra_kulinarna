@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Osiągnięcia Użytkownika</title>
+<link rel="stylesheet" href="{% static 'css/achievements.css' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/e95727a65e.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<script>
+function toggleDetails(id) {
+  var element = document.getElementById(id);
+  if (element.style.display === 'none') {
+    element.style.display = 'block';
+  } else {
+    element.style.display = 'none';
+  }
+}
+</script>
+<div class="navbar">
+  <a href="#user"><i class="fa-solid fa-user fa-xl" ></i></a><span class="user">Muholot #25432</span>
+  <a href="#home"   >Strona Główna</a>
+  <a href="#achivments" style="background-color: #ddd; color: black; ">Osiągnięcia</a>
+  <a href="#contact">Ranking</a>
+  <a href="#search">Wyszukaj</a>
+  <a href="#news">Nowości</a>
+  <button class="logout">Wyloguj</button>
+</div>
+<div class="achievements-container">
+  <h1>Osiągnięcia Użytkownika</h1>
+  <div class="achievement" onclick="toggleDetails('achievement1-details')">
+    <span class="achievement-name">Zdobywca Miesiąca</span>
+  <div class="progress-bar">
+      <div class="progress" style="width: 75%;"></div> <!-- Przykładowy postęp -->
+    </div>
+    <div id="achievement1-details" class="details">
+      Zdobądź najwięcej punktów w ciągu miesiąca, aby otrzymać tytuł Zdobywcy Miesiąca.
+    </div>
+  </div>
+  <!-- ... (kolejne osiągnięcia) ... -->
+</div>
+</body>
+</html>
