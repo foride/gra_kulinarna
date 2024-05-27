@@ -73,7 +73,7 @@ def dashboard_view(request):
         user_profile = UserProfile.objects.get(user=user)
         user_ranking = user_profile.user_ranking()
     except UserProfile.DoesNotExist:
-        user_ranking = User.objects.count()  # Default rank if user profile doesn't exist
+        user_ranking = UserProfile.objects.count()  # Default rank if user profile doesn't exist
 
     # Assuming you have a logic to get the recommended place
     recommended_place = "Efes Kebab Warszawa"  # Placeholder

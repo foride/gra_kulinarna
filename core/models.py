@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
-from django.db.models import Sum
+from django.db.models import Subquery, OuterRef, Value
+from django.db.models.functions import Coalesce
 
 from django.db import models
 
@@ -87,11 +88,19 @@ class UserProfile(models.Model):
     favorite_venues = models.ManyToManyField(Venue, related_name='favorited_by')
 
     def user_ranking(self):
-        user_rankings = UserProfile.objects.annotate(
-            total_points=Sum('user__userachievement__achievement__points_required')
+        # Subquery to get points from the Ranking model
+        ranking_points_subquery = Ranking.objects.filter(user=OuterRef('user')).values('points')
+
+        # Annotate user profiles with their total points using Subquery and Coalesce to handle users without points
+        user_profiles = UserProfile.objects.annotate(
+            total_points=Coalesce(Subquery(ranking_points_subquery[:1]), Value(0))
         ).order_by('-total_points')
 
-        for rank, user_profile in enumerate(user_rankings, start=1):
+        # Calculate and return the rank of the current user
+        for rank, user_profile in enumerate(user_profiles, start=1):
             if user_profile.user == self.user:
                 return rank
-        return User.objects.count()  # Default rank if not found in the sorted list
+        return UserProfile.objects.count()  # Default rank if not found in the sorted list
+
+    def __str__(self):
+        return self.user.username
