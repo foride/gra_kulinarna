@@ -5,66 +5,66 @@
 <head>
   <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-<script src="https://kit.fontawesome.com/e95727a65e.js" crossorigin="anonymous"></script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aplikacja Webowa</title>
-
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/e95727a65e.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikacja Webowa</title>
 </head>
 <body>
   <div class="navbar">
-    <a href="#user"><i class="fa-solid fa-user fa-xl" ></i></a><span class="user">{{ request.user.username }}</span>
+    <a href="{% url 'user_profile' %}"><i class="fa-solid fa-user fa-xl"></i></a><span class="user">{{ request.user.username }}</span>
 
-    <a href=""  style="background-color: #ddd; color: black; " >Strona Główna</a>
-    <a href="#achivments">Osiągnięcia</a>
-    <a href="#contact">Ranking</a>
-    <a href="#search">Wyszukaj</a>
+    <a href="{% url 'dashboard' %}" style="background-color: #ddd; color: black;">Strona Główna</a>
+    <a href="{% url 'achievements' %}">Osiągnięcia</a>
+    <a href="{% url 'user_ranking' %}">Ranking</a>
+    <a href="{% url 'search' %}">Wyszukaj</a>
     <a href="#news">Nowości</a>
     <button class="logout" onclick="location.href='{% url 'logout' %}';">Wyloguj</button>
   </div>
-<div class="tiles">
-  <div class="tile tile1">
-    <div class="tile-content">
-      <h2 style="color:green">Osiągnięcia</h2>
-      <p>Liczba zdobytych osiągnieć</p>
+
+  <div class="tiles">
+    <div class="tile tile1">
+      <div class="tile-content">
+        <h2 style="color:green">Osiągnięcia</h2>
+        <p>Liczba zdobytych osiągnieć</p>
+      </div>
+      <div>
+        <div class="element"><i class="fa-solid fa-star fa-2xl" style="color:gold"></i><span class="text">{{ achievements_count }}/{{ total_achievements }}</span></div>
+      </div>
     </div>
-    <div>
-      <div class="element"><i class="fa-solid fa-star fa-2xl" style="color:gold"></i><span class="text">20/60</span></div>
+
+    <div class="tile tile2">
+      <div class="tile-content">
+        <h2 style="color:red">Ranking</h2>
+        <p>Sprawdź jak wypadasz na tle reszty</p>
+      </div>
+      <div>    
+        <div class="element"><i class="fa-solid fa-trophy fa-2xl" style="color:orange"></i><span class="text">{{ user_ranking }} miejsce</span></div>
+      </div>
+    </div>
+
+    <div class="tile tile3">
+      <div class="tile-content">
+        <h2>Wyszukiwarka</h2>
+        <p>Znajdź lokalne miejsca i usługi</p>
+      </div>
+      <div>
+        <div class="element"><i class="fa-solid fa-fire-flame-curved fa-2xl" style="color:firebrick"></i><span class="text">{{ recommended_place }}</span></div>
+      </div>
+    </div>
+
+    <div class="tile tile4">
+      <div class="tile-content">
+        <h2 style="color:blue">Aktualizacje</h2>
+        <p>Sprawdź ostatnie zmiany</p>
+      </div> 
+      <div>
+        <div class="element"><i class="fa-solid fa-wrench fa-2xl" style="color:gray"></i><span class="text2">Naprawiliśmy kilka błedów</span></div>
+        <div class="element"><i class="fa-solid fa-utensils fa-2xl" style="color:silver"></i><span class="text2">Dodaliśmy nowe punkty z kebabowej Warszawy!</span></div>
+      </div>
     </div>
   </div>
-  <div class="tile tile2">
-    <div class="tile-content">
-      <h2 style ="color:red">Ranking</h2>
-      <p>Sprawdź jak wypadasz na tle reszty</p>
-    </div>
-    <div>    
-    <div class="element" ><i class="fa-solid fa-trophy fa-2xl" style="color:orange"></i><span class="text">45 miejsce</span></div>
-    </div>
-  </div>
-  <div class="tile tile3">
-    <div class="tile-content">
-      <h2>Wyszukiwarka</h2>
-      <p>Znajdź lokalne miejsca i usługi</p>
-    </div>
-    <div>
-      <div class="element"><i class="fa-solid fa-fire-flame-curved fa-2xl" style="color:firebrick"></i><span class="text">Efes Kebab Warszawa</span></div>
-    </div>
-  </div>
-  <div class="tile tile4">
-    <div class="tile-content">
-      <h2 style = "color:blue">Aktualizacje </h2>
-      <p>Sprawdź ostatnie zmiany</p>
-    </div> 
-    <div>
-      <div class="element"><i class="fa-solid fa-wrench fa-2xl" style ="color:gray"></i><span class="text2">Naprawiliśmy kilka błedów</span></div>
-      <div class="element"><i class="fa-solid fa-utensils fa-2xl" style ="color:silver"></i><span class="text2">Dodaliśmy nowe punkty z kebabowej Warszawy!</span></div>
-    </div>
-  </div>
-</div>
 </body>
 </html>

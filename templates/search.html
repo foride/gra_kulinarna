@@ -4,41 +4,51 @@
 <html lang="pl">
 <head>
   <link rel="stylesheet" href="{% static 'css/search.css' %}">
-<script src="https://kit.fontawesome.com/e95727a65e.js" crossorigin="anonymous"></script>
-<meta charset="UTF-8">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wyszukiwarka lokalizacji</title>
-
+  <script src="https://kit.fontawesome.com/e95727a65e.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wyszukiwarka lokalizacji</title>
 </head>
 <body>
-<div class="navbar">
-  <a href="#user"><i class="fa-solid fa-user fa-xl"></i></a><span class="user">Muholot #25432</span>
-  <a href="#home">Strona Główna</a>
-  <a href="#achivments">Osiągnięcia</a>
-  <a href="#contact">Ranking</a>
-  <a href="#search" style="background-color: #ddd; color: black; ">Wyszukaj</a>
-  <a href="#news">Nowości</a>
-  <button class="logout">Wyloguj</button>
-</div>
-
-<div class="search-container">
-  <form action="/action_page.php">
-    <input type="text" placeholder="Szukaj restauracji..." name="search">
-    <button type="submit">Szukaj</button>
-  </form>
-</div>
-
-<div class="container">
-  <div class="search-result">
-    <div>
-      <h1>Bar u Grochowej</h1>
-      <p class="rating">★★★☆☆</p>
-      <p class="address">Poznań, ul. Piątkowska 65A</p>
-    </div>
+  <div class="navbar">
+    <a href="{% url 'user_profile' %}"><i class="fa-solid fa-user fa-xl"></i></a><span class="user">{{ request.user.username }}</span>
+    <a href="{% url 'dashboard' %}">Strona Główna</a>
+    <a href="{% url 'achievements' %}">Osiągnięcia</a>
+    <a href="{% url 'user_ranking' %}">Ranking</a>
+    <a href="{% url 'search' %}" style="background-color: #ddd; color: black;">Wyszukaj</a>
+    <a href="#news">Nowości</a>
+    <button class="logout" onclick="location.href='{% url 'logout' %}';">Wyloguj</button>
   </div>
-</div>
+
+  <div class="search-container">
+    <form method="GET" action="{% url 'search' %}">
+      <input type="text" placeholder="Szukaj restauracji..." name="q" value="{{ request.GET.q }}">
+      <button type="submit">Szukaj</button>
+    </form>
+  </div>
+
+  <div class="container">
+    {% if query %}
+      <h2>Wyniki wyszukiwania dla: "{{ query }}"</h2>
+      {% if results %}
+        {% for result in results %}
+          <div class="search-result">
+            <div>
+              <h1><a href="{% url 'venue_details' result.id %}">{{ result.name }}</a></h1>
+              <p class="video-url"><a href="{{ result.video_url }}">{{ result.video_url }}</a></p>
+              <p class="description">{{ result.description }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>Brak wyników dla podanego zapytania.</p>
+      {% endif %}
+    {% else %}
+      <p>Wprowadź zapytanie, aby rozpocząć wyszukiwanie.</p>
+    {% endif %}
+  </div>
 </body>
 </html>

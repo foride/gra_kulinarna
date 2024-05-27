@@ -8,64 +8,83 @@
 <link rel="stylesheet" href="{% static 'css/user profile.css' %}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900&family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <script src="https://kit.fontawesome.com/e95727a65e.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="navbar">
-    <a href="#user" style="background-color: #ddd; color: black; "><i class="fa-solid fa-user fa-xl" ></i></a><span class="user">Muholot #25432</span>
-    <a href="#home"   >Strona Główna</a>
-    <a href="#achivments">Osiągnięcia</a>
-    <a href="#contact">Ranking</a>
-    <a href="#search">Wyszukaj</a>
+    <a href="{% url 'user_profile' %}" style="background-color: #ddd; color: black;"><i class="fa-solid fa-user fa-xl"></i></a><span class="user">{{ request.user.username }}</span>
+
+    <a href="{% url 'dashboard' %}">Strona Główna</a>
+    <a href="{% url 'achievements' %}">Osiągnięcia</a>
+    <a href="{% url 'user_ranking' %}">Ranking</a>
+    <a href="{% url 'search' %}">Wyszukaj</a>
     <a href="#news">Nowości</a>
-    <button class="logout">Wyloguj</button>
+    <button class="logout" onclick="location.href='{% url 'logout' %}';">Wyloguj</button>
   </div>
-<div class="profil">
-  <h2>Informacje o Profilu</h2>
-  <img src="avatar.png" alt="Avatar" class="avatar">
-  <div class="info">
-    <p>Nazwa użytkownika: <strong>JanKowalski</strong></p>
-    <p>Kontakt: <strong>jankowalski@example.com</strong></p>
+  <div class="profil">
+    <h2>Informacje o Profilu</h2>
+    <img src="{% static 'img/avatar.png' %}" alt="Avatar" class="avatar">
+    <div class="info">
+      <p>Nazwa użytkownika: <strong>{{ request.user.username }}</strong></p>
+      <p>Kontakt: <strong>{{ request.user.email }}</strong></p>
+    </div>
+
+    <div class="statystyki">
+      <h3>Statystyki Użytkownika</h3>
+      <ul>
+        <li>Łączna liczba punktów: <span>{{ total_points }}</span></li>
+        <li>Odwiedzone lokale: <span>{{ visited_venues_count }}</span></li>
+        <li>Zdobyte osiągnięcia: <span>{{ achievements_count }}</span></li>
+      </ul>
+    </div>
+
+    <div class="ustawienia">
+      <h3>Ustawienia Konta</h3>
+        <form method="post" action="{% url 'password_change' %}">
+        {% csrf_token %}
+        <button type="submit">Zmień hasło</button>
+        </form>
+    </div>
+
+    <div class="ulubione">
+      <h3>Ulubione lokale</h3>
+      <ul class="lista">
+        {% for favorite in favorite_venues %}
+          <li>{{ favorite.name }} <button type="button" onclick="removeFavorite('{{ favorite.id }}')">Usuń</button></li>
+        {% endfor %}
+      </ul>
+      <form method="post" action="{% url 'add_favorite' %}">
+        {% csrf_token %}
+        <select name="venue">
+          {% for venue in available_venues %}
+            <option value="{{ venue.id }}">{{ venue.name }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit">Dodaj lokal</button>
+      </form>
+    </div>
   </div>
 
-  <div class="statystyki">
-  <h3>Statystyki Użytkownika</h3>
-  <ul>
-    <li>Łączna liczba punktów: <span>1200</span></li>
-    <li>Odwiedzone lokale: <span>25</span></li>
-    <li>Zdobyte osiągnięcia: <span>5</span></li>
-  </ul>
-</div>
-
-
-  <div class="ustawienia">
-    <h3>Ustawienia Konta</h3>
-    <button onclick="alert('Zmiana hasła!')">Zmień hasło</button>
-    <button id="przyciskPowiadomienia">Powiadomienia</button>
-  </div>
-
-  <div class="ulubione">
-    <h3>Ulubione lokale</h3>
-    <ul class="lista">
-    <li>Kawiarnia Kawa <button onclick="this.parentElement.remove()">Usuń</button></li>
-    <li>Restauracja Smak <button onclick="this.parentElement.remove()">Usuń</button></li>
-    </ul>
-    <button onclick="alert('Dodaj do listy do odwiedzenia!')">Dodaj lokal</button>
-  </div>
-</div>
-
+  <script>
+    function removeFavorite(venueId) {
+      fetch("{% url 'remove_favorite' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+        body: JSON.stringify({ venue_id: venueId }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          location.reload();
+        } else {
+          alert("Błąd podczas usuwania ulubionego lokalu.");
+        }
+      });
+    }
+  </script>
 </body>
-<script>
-  document.addEventListener('DOMContentLoaded', (event) => {
-  const przyciskPowiadomienia = document.getElementById('przyciskPowiadomienia');
-
-  przyciskPowiadomienia.addEventListener('click', function() {
-    this.classList.toggle('aktywny');
-  });
-});
-</script>
 </html>

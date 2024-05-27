@@ -8,46 +8,43 @@
 <link rel="stylesheet" href="{% static 'css/user ranking.css' %}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900&family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <script src="https://kit.fontawesome.com/e95727a65e.js" crossorigin="anonymous"></script>
-
 </head>
 <body>
   <div class="navbar">
-    <a href="#user"><i class="fa-solid fa-user fa-xl" ></i></a><span class="user">Muholot #25432</span>
-    <a href="#home"  >Strona Główna</a>
-    <a href="#achivments">Osiągnięcia</a>
-    <a href="#contact" style="background-color: #ddd; color: black; ">Ranking</a>
-    <a href="#search">Wyszukaj</a>
+    <a href="{% url 'user_profile' %}"><i class="fa-solid fa-user fa-xl"></i></a><span class="user">{{ request.user.username }}</span>
+
+    <a href="{% url 'dashboard' %}">Strona Główna</a>
+    <a href="{% url 'achievements' %}">Osiągnięcia</a>
+    <a href="{% url 'user_ranking' %}" style="background-color: #ddd; color: black;">Ranking</a>
+    <a href="{% url 'search' %}">Wyszukaj</a>
     <a href="#news">Nowości</a>
-    <button class="logout">Wyloguj</button>
+    <button class="logout" onclick="location.href='{% url 'logout' %}';">Wyloguj</button>
   </div>
-<div class="ranking-panel">
-  <h1>Ranking Użytkowników</h1>
+  <div class="ranking-panel">
+    <h1>Ranking Użytkowników</h1>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Miejsce</th>
-        <th>Użytkownik</th>
-        <th>Punkty</th>
-        <th>Odwiedzone lokale</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>Jan Kowalski</td>
-        <td>1520</td>
-        <td>35</td>
-      </tr>
-      <!-- Tutaj wstaw kolejne dane użytkowników -->
-    </tbody>
-  </table>
-</div>
-
+    <table>
+      <thead>
+        <tr>
+          <th>Miejsce</th>
+          <th>Użytkownik</th>
+          <th>Punkty</th>
+          <th>Odwiedzone lokale</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user_profile in user_profiles %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ user_profile.user.username }}</td>
+            <td>{{ user_profile.total_points|default:0 }}</td>
+            <td>{{ user_profile.visited_venues_count }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>

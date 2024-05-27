@@ -8,7 +8,7 @@ body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
 .search-container input[type=text] { padding: 10px; margin-top: 8px; font-size: 17px; border: none; width: 80%; }
 .search-container button { padding: 10px 20px; margin-top: 8px; margin-left: 10px; background: #ddd; font-size: 17px; border: none; cursor: pointer; }
 .search-container button:hover { background: #ccc; }
-.rating { color: #ffcc00; }
+.video-url { color: #ffcc00; }
 .content { margin-top: 20px; }
 .search-result { 
   display: flex;
@@ -22,7 +22,7 @@ body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
   background-color: #ddd;
   cursor: pointer;
 }
-.address { font-style: italic; }
+.description { font-style: italic; }
 .user {
   font-family: "Roboto Condensed", sans-serif;
   font-weight: bold;

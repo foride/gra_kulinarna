@@ -9,50 +9,52 @@
     <link rel="stylesheet" href="{% static 'css/venue%20details.css' %}">
 </head>
 <body>
-    <div class="navbar">
-        <a href="#user"><i class="fa-solid fa-user fa-xl"></i></a><span class="user">Muholot #25432</span>
-        <a href="#home">Strona Główna</a>
-        <a href="#achivments">Osiągnięcia</a>
-        <a href="#contact">Ranking</a>
-        <a href="#search">Wyszukaj</a>
-        <a href="#news">Nowości</a>
-        <button class="logout">Wyloguj</button>
-      </div>
-      <section id="description" class="description">
-        <div class="description-content">
-            <h2>Kłodzka Cafe</h2>
-            <p>Przytulna kawiarnia oferująca szeroki wybór kaw i herbat. Idealne miejsce na popołudniowy relaks.</p>
-            <p>Godziny otwarcia: 8:00 - 20:00</p>
-            <p>Lokalizacja: ul. Kawiarniana 123, 00-789 Warszawa</p>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2506.916618924184!2d17.04275997662583!3d51.07308924233812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470fc3d2af8ea375%3A0x1e661cd643c699d!2sK%C5%82odzka%20Caf%C3%A9%20%26%20Lody%20Naturalne%20z%20Krzyckiej!5e0!3m2!1sen!2spl!4v1713298898379!5m2!1sen!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <div class="navbar">
+    <a href="{% url 'user_profile' %}"><i class="fa-solid fa-user fa-xl"></i></a><span class="user">{{ request.user.username }}</span>
+    <a href="{% url 'dashboard' %}">Strona Główna</a>
+    <a href="{% url 'achievements' %}">Osiągnięcia</a>
+    <a href="{% url 'user_ranking' %}">Ranking</a>
+    <a href="{% url 'search' %}">Wyszukaj</a>
+    <a href="#news">Nowości</a>
+    <button class="logout" onclick="location.href='{% url 'logout' %}';">Wyloguj</button>
+  </div>
+
+  <section id="description" class="description">
+    <div class="description-content">
+        <h2>{{ venue.name }}</h2>
+        <p>{{ venue.description }}</p>
+        <p>Godziny otwarcia: <!-- Use Google API or manual input to fill this --></p>
+        <p>Lokacja: <!-- Use Google API or manual input to fill this --></p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2506.916618924184!2d17.04275997662583!3d51.07308924233812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470fc3d2af8ea375%3A0x1e661cd643c699d!2sK%C5%82odzka%20Caf%C3%A9%20%26%20Lody%20Naturalne%20z%20Krzyckiej!5e0!3m2!1sen!2spl!4v1713298898379!5m2!1sen!2spl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="description-gallery">
+        <div class="gallery">
+            <!-- Use Google API or manual input to fill this -->
+            <div class="photo"><img src="{% static 'images/venue1_1.jpg' %}" alt="Zdjęcie 1"></div>
+            <div class="photo"><img src="{% static 'images/venue1_2.jpg' %}" alt="Zdjęcie 2"></div>
+            <div class="photo"><img src="{% static 'images/venue1_3.jpg' %}" alt="Zdjęcie 3"></div>
+            <div class="photo"><img src="{% static 'images/venue1_4.jpg' %}" alt="Zdjęcie 4"></div>
         </div>
-        <div class="description-gallery">
-            <div class="gallery">
-                <div class="photo"><img src="../images/venue1_1.jpg" alt="Zdjęcie 1"></div>
-                <div class="photo"><img src="../images/venue1_2.jpg" alt="Zdjęcie 2"></div>
-                <div class="photo"><img src="../images/venue1_3.jpg" alt="Zdjęcie 3"></div>
-                <div class="photo"><img src="../images/venue1_4.jpg" alt="Zdjęcie 4"></div>
-            </div>
-        </div>
-    </section>
-    <section id="qr-code">
-        <p>Wpisz kod lokalu:</p>
-        <input type="text" placeholder="Wpisz kod">
-        <button>Sprawdź</button>
-    </section>
-    <section id="reviews">
-        <h2>Opinie użytkowników</h2>
-        <article>
-            <p>Marek: Bardzo miłe miejsce, świetna obsługa! (5/5)</p>
-        </article>
-        <article>
-            <p>Ania: Kawa mogłaby być lepsza, ale ciasta są pyszne. (4/5)</p>
-        </article>
-        <form>
-            <label for="new-review">Dodaj swoją opinię:</label>
-            <textarea id="new-review" rows="4" cols="50"></textarea>
-            <button type="submit">Wyślij</button>
-        </form>
-    </section>
+    </div>
+  </section>
+  <section id="qr-code">
+    <p>Wpisz kod lokalu: {{ venue.visit_code }}</p>
+    <input type="text" placeholder="Wpisz kod">
+    <button>Sprawdź</button>
+  </section>
+  <section id="reviews">
+    <h2>Opinie użytkowników</h2>
+    {% for discussion in discussions %}
+      <article>
+        <p>{{ discussion.user.username }}: {{ discussion.content }} ({{ discussion.creation_date }})</p>
+      </article>
+    {% endfor %}
+    <form method="post" action="{% url 'add_review' venue.id %}">
+      {% csrf_token %}
+      <label for="new-review">Dodaj swoją opinię:</label>
+      <textarea id="new-review" name="content" rows="4" cols="50"></textarea>
+      <button type="submit">Wyślij</button>
+    </form>
+  </section>
 </body>
 </html>
