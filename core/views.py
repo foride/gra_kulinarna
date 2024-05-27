@@ -1,12 +1,14 @@
 from django.contrib import messages, auth
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
-from django.db.models import Sum
+from django.db.models import OuterRef, Subquery, Sum, Value
 from django.db.models.fields import json
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import UserProfile, UserAchievement, Visit, Achievement, Venue, Discussion
+from .models import UserProfile, UserAchievement, Visit, Achievement, Venue, Discussion, Ranking
+from django.db.models.functions import Coalesce
+from django.db.models import Max
 
 
 def login_view(request):
@@ -116,6 +118,25 @@ def venue_details_view(request, venue_id):
 
 
 @login_required
+def verify_venue_code(request, venue_id):
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        entered_code = request.POST.get('venue_code')
+        venue = get_object_or_404(Venue, id=venue_id)
+
+        if entered_code == venue.visit_code:
+            ranking, created = Ranking.objects.get_or_create(user=request.user, defaults={'points': 0})
+            if created:
+                max_position = Ranking.objects.aggregate(Max('position'))['position__max']
+                ranking.position = max_position + 1 if max_position is not None else 1
+            ranking.points += 50
+            ranking.save()
+            return JsonResponse({'status': 'success', 'message': 'Poprawny kod! Otrzymujesz 50 punktów.'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Niepoprawny kod.'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
+
+
+@login_required
 def add_review(request, venue_id):
     if request.method == 'POST':
         content = request.POST.get('content')
@@ -181,13 +202,17 @@ def remove_favorite(request):
 
 @login_required
 def user_ranking_view(request):
+    # Subquery to get points from the Ranking model
+    ranking_points_subquery = Ranking.objects.filter(user=OuterRef('user')).values('points')
+
+    # Annotate user profiles with their total points using Subquery and Coalesce to handle users without points
     user_profiles = UserProfile.objects.annotate(
-        total_points=Sum('user__userachievement__achievement__points_required')
+        total_points=Coalesce(Subquery(ranking_points_subquery[:1]), Value(0))
     ).order_by('-total_points')
 
-    # Annotate each user profile with the count of visited venues
+    # Calculate visited venues count
     for user_profile in user_profiles:
-        user_profile.visited_venues_count = user_profile.user.visit_set.count()
+        user_profile.visited_venues_count = user_profile.total_points // 50
 
     context = {
         'user_profiles': user_profiles,

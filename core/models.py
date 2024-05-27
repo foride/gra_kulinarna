@@ -1,6 +1,7 @@
-from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+
+from django.db import models
 
 
 class Venue(models.Model):
@@ -8,6 +9,10 @@ class Venue(models.Model):
     description = models.TextField(null=True, blank=True)
     video_url = models.URLField(blank=True, null=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    visit_code = models.CharField(max_length=4)
+    open_hours = models.CharField(max_length=255)
+    localization = models.CharField(max_length=400)
+    iframe_link = models.URLField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -42,12 +47,12 @@ class Discussion(models.Model):
 
 
 class Ranking(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    position = models.IntegerField(unique=True)
-    points = models.IntegerField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    points = models.IntegerField(default=0)
+    position = models.IntegerField(unique=True, null=True, blank=True, default=0)
 
     def __str__(self):
-        return f'{self.user.username} - {self.position}'
+        return f"{self.user.username} - {self.points} points"
 
 
 class Achievement(models.Model):

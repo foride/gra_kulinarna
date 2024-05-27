@@ -14,7 +14,6 @@
 <body>
   <div class="navbar">
     <a href="{% url 'user_profile' %}"><i class="fa-solid fa-user fa-xl"></i></a><span class="user">{{ request.user.username }}</span>
-
     <a href="{% url 'dashboard' %}">Strona Główna</a>
     <a href="{% url 'achievements' %}">Osiągnięcia</a>
     <a href="{% url 'user_ranking' %}" style="background-color: #ddd; color: black;">Ranking</a>
@@ -24,7 +23,6 @@
   </div>
   <div class="ranking-panel">
     <h1>Ranking Użytkowników</h1>
-
     <table>
       <thead>
         <tr>
