@@ -5,7 +5,166 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profil Użytkownika</title>
-<link rel="stylesheet" href="{% static 'css/user profile.css' %}">
+<style>
+    body, html {
+        background-color: #f4f4f4;
+        color: #333;
+        line-height: 1.6;
+        padding: 0;
+        margin: 0;
+        height: 100%;
+    }
+    .profil {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 700px;
+        margin: 10px auto;
+        padding: 20px;
+    }
+    h2, h3 {
+        color: #333;
+    }
+    .avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        float: left;
+        margin-right: 20px;
+    }
+    .info {
+        overflow: hidden; /* Zapobiega przekształcaniu przez float */
+        margin-bottom: 30px;
+    }
+    .info p {
+        margin: 0;
+    }
+    .lista {
+        padding: 0;
+    }
+    .lista li {
+        background-color: #e9e9e9;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    button {
+        background-color: #5cb85c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .lista {
+        list-style: none; /* Usunięcie kropek */
+        padding: 0;
+    }
+    .lista li {
+        background-color: #e9e9e9;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: relative; /* Pozycjonowanie dla przycisku usuwania */
+    }
+    .lista li button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #d9534f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+    .statystyki {
+        background-color: #fff;
+        border-left: 5px solid #5cb85c;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    .statystyki h3 {
+        margin-top: 0;
+    }
+    .statystyki ul {
+        list-style: none;
+        padding: 0;
+    }
+    .statystyki ul li {
+        background-color: #f9f9f9;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+    .statystyki ul li:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    .navbar { 
+        background-color: #333; 
+        overflow: hidden;
+        display: flex; 
+        line-height: normal;
+    }
+    .navbar a, .navbar button { 
+        float: left; 
+        display: block; 
+        color: white; 
+        text-align: center; 
+        padding: 14px 16px; 
+        text-decoration: none; 
+        border: none; 
+        background: none; 
+        cursor: pointer; 
+    }
+    .navbar a:hover, .navbar button:hover { 
+        background-color: #ddd; 
+        color: black; 
+    }
+    .navbar .user { 
+        float: left; 
+        padding: 14px 16px; 
+        color: white; 
+    }
+    .navbar .logout { 
+        float: right; 
+        margin-left: 57%;
+    }
+    .header { 
+        background-color: #333; 
+        color: white; 
+        padding: 10px 20px; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+    }
+    .username { 
+        font-size: 20px; 
+    }
+    .logout-button { 
+        padding: 5px 15px; 
+        background-color: #f44336; 
+        color: white; 
+        border: none; 
+        cursor: pointer; 
+    }
+    .nieaktywny {
+        background-color: #ccc;
+    }
+    button {
+        transition: opacity 0.3s; /* Dodaje płynne przejście dla efektu opacity */
+    }
+    button:hover {
+        opacity: 0.7; /* Przygasza przycisk podczas najechania */
+    }
+</style>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900&family=Oswald:wght@200..700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Platypi:ital,wght@0,300..800;1,300..800&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
