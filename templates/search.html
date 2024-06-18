@@ -3,7 +3,95 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <link rel="stylesheet" href="{% static 'css/search.css' %}">
+    <style>
+      body { 
+          font-family: Arial, sans-serif; 
+          margin: 0; 
+          padding: 0; 
+      }
+      .navbar { 
+          background-color: #333; 
+          overflow: hidden;
+          display: flex; 
+      }
+      .navbar a, .navbar button { 
+          float: left; 
+          display: block; 
+          color: white; 
+          text-align: center; 
+          padding: 14px 16px; 
+          text-decoration: none; 
+          border: none; 
+          background: none; 
+          cursor: pointer; 
+      }
+      .navbar a:hover, .navbar button:hover { 
+          background-color: #ddd; 
+          color: black; 
+      }
+      .navbar .user { 
+          float: left; 
+          padding: 14px 16px; 
+          color: white; 
+      }
+      .navbar .logout { 
+          float: right; 
+          margin-left: 57%;
+      }
+      .search-container { 
+          text-align: center; 
+          padding: 20px; 
+      }
+      .search-container input[type=text] { 
+          padding: 10px; 
+          margin-top: 8px; 
+          font-size: 17px; 
+          border: none; 
+          width: 80%; 
+      }
+      .search-container button { 
+          padding: 10px 20px; 
+          margin-top: 8px; 
+          margin-left: 10px; 
+          background: #ddd; 
+          font-size: 17px; 
+          border: none; 
+          cursor: pointer; 
+      }
+      .search-container button:hover { 
+          background: #ccc; 
+      }
+      .video-url { 
+          color: #ffcc00; 
+      }
+      .content { 
+          margin-top: 20px; 
+      }
+      .search-result { 
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border: 1px solid #ccc; 
+          padding: 10px; 
+          margin-top: 20px; 
+      }
+      .search-result:hover {
+          background-color: #ddd;
+          cursor: pointer;
+      }
+      .description { 
+          font-style: italic; 
+      }
+      .user {
+          font-family: "Roboto Condensed", sans-serif;
+          font-weight: bold;
+      }
+      .fa-solid.fa-circle-info.fa-2xl {
+          font-size: 60px;
+          margin-right: 10%;
+      }
+  </style>
+
   <script src="https://kit.fontawesome.com/e95727a65e.js" crossorigin="anonymous"></script>
   <meta charset="UTF-8">
   <link rel="preconnect" href="https://fonts.googleapis.com">
