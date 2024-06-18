@@ -6,7 +6,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login page</title>
-    <link rel="stylesheet" href="{% './login.css' %}">
+    <style>
+        body {
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="email"], input[type="password"], input[type="username"] {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button, .login-btn, .register-btn {
+            padding: 10px 20px;
+            margin-bottom: 6px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #5c67f2;
+            color: white;
+            display: block;
+            width: 100%;
+        }
+
+        button:hover, .login-btn:hover, .register-btn:hover {
+            background-color: #4a54e1;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        /* Inline style for error messages */
+        h5 {
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <div class="login-container">
